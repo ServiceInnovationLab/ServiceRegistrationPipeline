@@ -1,0 +1,4 @@
+CKAN_API_KEY: foobar
+CKAN_URL: https://uat.data.govt.nz
+CKAN_CLIENT_USER_AGENT: "Randoms"
+CKAN_PACKAGE_ID: '123'
