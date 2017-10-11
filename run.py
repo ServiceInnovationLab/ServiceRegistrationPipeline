@@ -21,14 +21,20 @@ ARCHIVE_DIR = os.environ.get('ARCHIVE_DIR')
 
 if __name__ == "__main__":
     print(CKAN_URL)
-    files = [f for f in listdir(FILES_TO_PUBLISH_DIR) if isfile(join(FILES_TO_PUBLISH_DIR, f))]
+    files = [f for f in listdir(FILES_TO_PUBLISH_DIR) if isfile(
+        join(FILES_TO_PUBLISH_DIR, f))]
     mysite = RemoteCKAN(CKAN_URL, apikey=CKAN_API_KEY,
                         user_agent=CKAN_CLIENT_USER_AGENT)
-    for f in files:
-        filename = "{dir}{file}".format(dir=FILES_TO_PUBLISH_DIR, file=f)
-        print(filename)
+    for filename in files:
+        file_to_publish = "{dir}{filename}".format(dir=FILES_TO_PUBLISH_DIR, filename=filename)
+        print(file_to_publish)
+
+        # Publish
         mysite.action.resource_create(
             package_id=CKAN_PACKAGE_ID,
             url='dummy-value',  # ignored but required by CKAN<2.6
-            upload=open(filename, 'rb'))
+            upload=open(file_to_publish, 'rb'))
 
+        # Archive
+        archive_filename = "{dir}{filename}".format(dir=ARCHIVE_DIR, filename=filename)
+        os.rename(file_to_publish, archive_filename)
