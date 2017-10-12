@@ -1,6 +1,7 @@
 #!/usr/bin/env python3.5
 from os import listdir
 from os.path import isfile, join
+import csv
 import os
 from dotenv import load_dotenv, find_dotenv
 from ckanapi import RemoteCKAN
@@ -21,6 +22,10 @@ ARCHIVE_DIR = os.environ.get('ARCHIVE_DIR')
 
 DATA_GOVT_NZ = RemoteCKAN(CKAN_URL, apikey=CKAN_API_KEY,
                           user_agent=CKAN_CLIENT_USER_AGENT)
+
+def read_structure_from_last_run(file_name):
+    pass
+    # with open('eggs.csv', 'rb') as csvfile:
 
 def publish_fsd():
     files = ServiceRegistrationPipeline.find_files(FILES_TO_PUBLISH_DIR)
