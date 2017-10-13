@@ -7,8 +7,6 @@ from dotenv import load_dotenv, find_dotenv
 from ckanapi import RemoteCKAN
 import ServiceRegistrationPipeline
 
-print(find_dotenv())
-
 # Load config from .env
 load_dotenv(find_dotenv())
 
@@ -23,28 +21,49 @@ ARCHIVE_DIR = os.environ.get('ARCHIVE_DIR')
 DATA_GOVT_NZ = RemoteCKAN(CKAN_URL, apikey=CKAN_API_KEY,
                           user_agent=CKAN_CLIENT_USER_AGENT)
 
-def read_structure_from_last_run(file_name):
-    pass
-    # with open('eggs.csv', 'rb') as csvfile:
+
+def read_structure_from_last_run(filename):
+    previous_file = "{dir}{filename}".format(
+        dir=ARCHIVE_DIR, filename=filename)
+
+    with open(previous_file) as csvfile:
+        reader = csv.DictReader(csvfile)
+        previous_headers = reader.fieldnames
+
+    print(previous_headers)
+
+    new_file = "{dir}{filename}".format(
+        dir=FILES_TO_PUBLISH_DIR, filename=filename)
+    with open(new_file) as csvfile:
+        reader = csv.DictReader(csvfile)
+        new_headers = reader.fieldnames
+
+    print(new_headers)
+
+    if(new_headers != previous_headers):
+        raise StructureChangedException(previous_headers, new_headers)
+
 
 def publish_fsd():
     files = ServiceRegistrationPipeline.find_files(FILES_TO_PUBLISH_DIR)
 
     for filename in files:
-        file_to_publish = "{dir}{filename}".format(
-            dir=FILES_TO_PUBLISH_DIR, filename=filename)
-        print(file_to_publish)
+        read_structure_from_last_run(filename)
 
-        # Publish
-        DATA_GOVT_NZ.action.resource_create(
-            package_id=CKAN_PACKAGE_ID,
-            url='dummy-value',  # ignored but required by CKAN<2.6
-            upload=open(file_to_publish, 'rb'))
+        # file_to_publish = "{dir}{filename}".format(
+        #     dir=FILES_TO_PUBLISH_DIR, filename=filename)
+        # print(file_to_publish)
 
-        # Archive
-        archive_filename = "{dir}{filename}".format(
-            dir=ARCHIVE_DIR, filename=filename)
-        os.rename(file_to_publish, archive_filename)
+        # # Publish
+        # DATA_GOVT_NZ.action.resource_create(
+        #     package_id=CKAN_PACKAGE_ID,
+        #     url='dummy-value',  # ignored but required by CKAN<2.6
+        #     upload=open(file_to_publish, 'rb'))
+
+        # # Archive
+        # archive_filename = "{dir}{filename}".format(
+        #     dir=ARCHIVE_DIR, filename=filename)
+        # os.rename(file_to_publish, archive_filename)
 
 
 def delete_existing_resources():
