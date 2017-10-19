@@ -4,8 +4,7 @@ from os.path import isfile, join
 import os
 from dotenv import load_dotenv, find_dotenv
 from ckanapi import RemoteCKAN
-
-print(find_dotenv())
+import ServiceRegistrationPipeline
 
 # Load config from .env
 load_dotenv(find_dotenv())
@@ -18,24 +17,42 @@ CKAN_PACKAGE_ID = os.environ.get('CKAN_PACKAGE_ID')
 FILES_TO_PUBLISH_DIR = os.environ.get('FILES_TO_PUBLISH_DIR')
 ARCHIVE_DIR = os.environ.get('ARCHIVE_DIR')
 
-if __name__ == "__main__":
+DATA_GOVT_NZ = RemoteCKAN(CKAN_URL, apikey=CKAN_API_KEY,
+                          user_agent=CKAN_CLIENT_USER_AGENT)
 
+
+def publish_fsd():
     files = ServiceRegistrationPipeline.find_files(FILES_TO_PUBLISH_DIR)
 
-    our_ckan = RemoteCKAN(CKAN_URL, apikey=CKAN_API_KEY,
-                          user_agent=CKAN_CLIENT_USER_AGENT)
     for filename in files:
+        print(file_to_publish)
+        print("Checking file structure is same as last")
+        ServiceRegistrationPipeline.ensure_data_structure_unchanged(
+            filename, archive_dir=ARCHIVE_DIR, incoming_dir=FILES_TO_PUBLISH_DIR)
+
         file_to_publish = "{dir}{filename}".format(
             dir=FILES_TO_PUBLISH_DIR, filename=filename)
-        print(file_to_publish)
 
+        print("Publishing")
         # Publish
-        our_ckan.action.resource_create(
+        DATA_GOVT_NZ.action.resource_create(
             package_id=CKAN_PACKAGE_ID,
             url='dummy-value',  # ignored but required by CKAN<2.6
             upload=open(file_to_publish, 'rb'))
 
+        print("Saving archive copy")
         # Archive
         archive_filename = "{dir}{filename}".format(
             dir=ARCHIVE_DIR, filename=filename)
         os.rename(file_to_publish, archive_filename)
+
+
+def delete_existing_resources():
+    package = DATA_GOVT_NZ.action.package_show(id=CKAN_PACKAGE_ID)
+    resources = package.get('resources')
+    for r in resources:
+        resource_id = r.get('id')
+        DATA_GOVT_NZ.action.resource_delete(id=resource_id)
+
+if __name__ == "__main__":
+    publish_fsd()
