@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.5
+#!/usr/bin/env python
 from os import listdir
 from os.path import isfile, join
 import os
