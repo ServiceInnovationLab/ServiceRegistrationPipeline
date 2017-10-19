@@ -25,22 +25,25 @@ def publish_fsd():
     files = ServiceRegistrationPipeline.find_files(FILES_TO_PUBLISH_DIR)
 
     for filename in files:
+        print(file_to_publish)
+        print("Checking file structure is same as last")
         ServiceRegistrationPipeline.ensure_data_structure_unchanged(filename, archive_dir=ARCHIVE_DIR, incoming_dir=FILES_TO_PUBLISH_DIR)
 
-        # file_to_publish = "{dir}{filename}".format(
-        #     dir=FILES_TO_PUBLISH_DIR, filename=filename)
-        # print(file_to_publish)
+        file_to_publish = "{dir}{filename}".format(
+            dir=FILES_TO_PUBLISH_DIR, filename=filename)
 
-        # # Publish
-        # DATA_GOVT_NZ.action.resource_create(
-        #     package_id=CKAN_PACKAGE_ID,
-        #     url='dummy-value',  # ignored but required by CKAN<2.6
-        #     upload=open(file_to_publish, 'rb'))
+        print("Publishing")
+        # Publish
+        DATA_GOVT_NZ.action.resource_create(
+            package_id=CKAN_PACKAGE_ID,
+            url='dummy-value',  # ignored but required by CKAN<2.6
+            upload=open(file_to_publish, 'rb'))
 
-        # # Archive
-        # archive_filename = "{dir}{filename}".format(
-        #     dir=ARCHIVE_DIR, filename=filename)
-        # os.rename(file_to_publish, archive_filename)
+        print("Saving archive copy")
+        # Archive
+        archive_filename = "{dir}{filename}".format(
+            dir=ARCHIVE_DIR, filename=filename)
+        os.rename(file_to_publish, archive_filename)
 
 
 def delete_existing_resources():
