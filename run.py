@@ -27,7 +27,8 @@ def publish_fsd():
     for filename in files:
         print(file_to_publish)
         print("Checking file structure is same as last")
-        ServiceRegistrationPipeline.ensure_data_structure_unchanged(filename, archive_dir=ARCHIVE_DIR, incoming_dir=FILES_TO_PUBLISH_DIR)
+        ServiceRegistrationPipeline.ensure_data_structure_unchanged(
+            filename, archive_dir=ARCHIVE_DIR, incoming_dir=FILES_TO_PUBLISH_DIR)
 
         file_to_publish = "{dir}{filename}".format(
             dir=FILES_TO_PUBLISH_DIR, filename=filename)
