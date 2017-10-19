@@ -1,7 +1,6 @@
 #!/usr/bin/env python3.5
 from os import listdir
 from os.path import isfile, join
-import csv
 import os
 from dotenv import load_dotenv, find_dotenv
 from ckanapi import RemoteCKAN
@@ -22,33 +21,11 @@ DATA_GOVT_NZ = RemoteCKAN(CKAN_URL, apikey=CKAN_API_KEY,
                           user_agent=CKAN_CLIENT_USER_AGENT)
 
 
-def read_structure_from_last_run(filename):
-    previous_file = "{dir}{filename}".format(
-        dir=ARCHIVE_DIR, filename=filename)
-
-    with open(previous_file) as csvfile:
-        reader = csv.DictReader(csvfile)
-        previous_headers = reader.fieldnames
-
-    print(previous_headers)
-
-    new_file = "{dir}{filename}".format(
-        dir=FILES_TO_PUBLISH_DIR, filename=filename)
-    with open(new_file) as csvfile:
-        reader = csv.DictReader(csvfile)
-        new_headers = reader.fieldnames
-
-    print(new_headers)
-
-    if(new_headers != previous_headers):
-        raise StructureChangedException(previous_headers, new_headers)
-
-
 def publish_fsd():
     files = ServiceRegistrationPipeline.find_files(FILES_TO_PUBLISH_DIR)
 
     for filename in files:
-        read_structure_from_last_run(filename)
+        ServiceRegistrationPipeline.ensure_data_structure_unchanged(filename, archive_dir=ARCHIVE_DIR, incoming_dir=FILES_TO_PUBLISH_DIR)
 
         # file_to_publish = "{dir}{filename}".format(
         #     dir=FILES_TO_PUBLISH_DIR, filename=filename)
