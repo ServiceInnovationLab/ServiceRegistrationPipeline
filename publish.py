@@ -78,7 +78,8 @@ def update_existing_resource(filename, resource_id):
 def create_new_resource(filename):
     print("Publishing new resource.")
     DATA_GOVT_NZ.action.resource_create(
-        package_id=CKAN_PACKAGE_ID, description=filename, upload=open(file_to_publish(filename), 'rb'))
+        package_id=CKAN_PACKAGE_ID, description=filename,
+        upload=open(file_to_publish(filename), 'rb'))
 
 
 def delete_all_existing_resources():
@@ -105,14 +106,17 @@ if __name__ == "__main__":
 
             print("Checking file structure is same as last time.")
             ensure_data_structure_unchanged(
-                filename, archive_dir=ARCHIVE_DIR, incoming_dir=FILES_TO_PUBLISH_DIR)
+                filename, archive_dir=ARCHIVE_DIR,
+                incoming_dir=FILES_TO_PUBLISH_DIR)
 
             resource_id = find_existing_resource_id(filename)
 
             if (resource_id):
+                print("Publishing update to CKAN")
                 # TODO: Check if file is identical
                 update_existing_resource(filename, resource_id)
             else:
+                print("Creating new resource on CKAN")
                 create_new_resource(filename)
 
             print("Saving archive copy.")
