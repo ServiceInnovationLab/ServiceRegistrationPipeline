@@ -2,7 +2,6 @@
 source .env
 set -euv
 
-ssh-add $SSH_KEY_FILE
-sftp $SFTP_USER@$SFTP_HOST:$SFTP_DIR/* ./incoming/
+sftp -i $SSH_KEY_FILE $SFTP_USER@$SFTP_HOST:$SFTP_DIR/* ./incoming/
 
 gpg --decrypt incoming/*
