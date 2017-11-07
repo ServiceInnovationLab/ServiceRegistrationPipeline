@@ -48,7 +48,8 @@ def ensure_data_structure_unchanged(filename, archive_dir, incoming_dir):
         new_headers = reader.fieldnames
 
     if(new_headers != previous_headers):
-        raise StructureChangedException(previous_headers, new_headers)
+        difference = set(new_headers) - set(previous_headers)
+        raise RuntimeError("new headers: {difference}".format(difference=difference))
 
 
 def find_existing_resource_id(filename):
