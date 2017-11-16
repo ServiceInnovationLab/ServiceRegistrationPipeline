@@ -4,4 +4,4 @@ Takes existing data on NZ Government services, and publishes on CKAN (data.govt.
 
 
 1) Get an publisher api key from data.govt.nz
-2) put API key in `.env`
+2) put API key in `.env` (see env-example file)
