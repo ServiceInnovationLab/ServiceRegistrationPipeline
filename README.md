@@ -38,25 +38,25 @@ Then it publishes this data on data.govt.nz (see publish.sh)
 
 MSD place the data on their SFTP server. Configure your credentials in `.env`.
 
-`FILES_TO_PUBLISH_DIR`: Directory to place fetched files in
-`SFTP_HOST`: the host to connect to
-`SFTP_USER`: the user to connect as
-`SFTP_DIR`: the folder to look in on the sftp server
+* `FILES_TO_PUBLISH_DIR`: Directory to place fetched files in
+* `SFTP_HOST`: the host to connect to
+* `SFTP_USER`: the user to connect as
+* `SFTP_DIR`: the folder to look in on the sftp server
 
 # Decryption
 
 MSD encrypt this data. They use PGP keys. We've supplied them the public key and they use this to encrypt before sending to us. Configure your user's gpg appropriately
 
-`ARCHIVE_DIR`: The directory to place decrypted files
+* `ARCHIVE_DIR`: The directory to place decrypted files
 
 # Publishing
 
 Data.govt.nz allows publishing with an API key. Configure your credentials in `.env`
 
-`CKAN_API_KEY`: Your ckan api key
-`CKAN_CLIENT_USER_AGENT`: Make up a ckan client user agent
-`CKAN_URL`: Which CKan are you talking to
-`CKAN_PACKAGE_ID`: Package you're publishing to
+* `CKAN_API_KEY`: Your ckan api key
+* `CKAN_CLIENT_USER_AGENT`: Make up a ckan client user agent
+* `CKAN_URL`: Which CKan are you talking to
+* `CKAN_PACKAGE_ID`: Package you're publishing to
 
-`FILES_TO_PUBLISH_DIR`: Dir as used in fetch.sh and decrypt.sh
-`ARCHIVE_DIR`: Dir as used in fetch.sh and decrypt.sh
+* `FILES_TO_PUBLISH_DIR`: Dir as used in fetch.sh and decrypt.sh
+* `ARCHIVE_DIR`: Dir as used in fetch.sh and decrypt.sh
