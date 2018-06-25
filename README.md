@@ -24,6 +24,15 @@ cd /home/regpipeline/ServiceRegistrationPipeline
 
 ```
 
+# Requirements.txt
+
+Python version is set in `.python-version` (use pyenv)
+
+install dependencies:
+```
+cd ServiceInnovationPipeline && pip install -r requirements.txt
+```
+
 # Work flow
 
 Here's what it does:
