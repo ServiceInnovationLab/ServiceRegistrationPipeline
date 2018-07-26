@@ -1,6 +1,8 @@
 .env
-
 *.pyc
-
 incoming/*
 archive/*
+bin/
+lib/
+include/
+pip-selfcheck.json

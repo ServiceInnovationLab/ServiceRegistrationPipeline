@@ -1,3 +1,3 @@
 #!/bin/bash
-source ./ENV/bin/activate
+source ./bin/activate
 ./publish.py
