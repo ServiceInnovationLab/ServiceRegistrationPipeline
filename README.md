@@ -13,7 +13,7 @@ This is a set of command line scripts that can be used to pickup data files from
 
 ## Getting started
 
- 1. Setup your servers operating system and dependancies (as above).
+ 1. Setup your servers operating system, dependancies and crypto (ssh/gpg keys).
  2. `git clone` this repository and `cd` into the directory. 
  3. `pyenv install` will install the correct python version.
  4. `virtualenv .` install the python virtual environment in the root of the directory.
@@ -32,10 +32,12 @@ Here's what it does:
  - Lastly, it publishes this data into a CKAN dataset either creating a new data resource or updating an existing one (see publish.sh).
 
  ### Generating an SSH key
-TODO
+ - Run `ssh-keygen -t rsa` to generate a private/public key pair.
+ - Get a copy of the public key at `~/.ssh/id_rsa.pub` to place in the data pickup point server's `authorized_keys` file to allow you access.
 
 ### Generating a GPG key
-TODO
+ - Run `gpg --expert --gen-key` and fill in the credentials (use a 4096bit key as a preference).
+ - Export your public key to be used to encrypt data you will later fetch using `gpg -a --export NAME_OF_USER_HERE > public_key.gpg`.
 
 ### API Key
 Get your API key from your user profile in CKAN, place in `.env` (see env-example file)
