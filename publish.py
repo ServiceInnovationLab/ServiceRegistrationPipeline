@@ -23,7 +23,7 @@ CKAN_PACKAGE_ID = os.environ.get('CKAN_PACKAGE_ID')
 FILES_TO_PUBLISH_DIR = os.environ.get('FILES_TO_PUBLISH_DIR')
 ARCHIVE_DIR = os.environ.get('ARCHIVE_DIR')
 
-DATA_GOVT_NZ = RemoteCKAN(CKAN_URL, apikey=CKAN_API_KEY,
+CKAN_REMOTE = RemoteCKAN(CKAN_URL, apikey=CKAN_API_KEY,
                           user_agent=CKAN_CLIENT_USER_AGENT)
 
 
@@ -66,29 +66,29 @@ def archive_file(filename):
 
 
 def existing_resources():
-    package = DATA_GOVT_NZ.action.package_show(id=CKAN_PACKAGE_ID)
+    package = CKAN_REMOTE.action.package_show(id=CKAN_PACKAGE_ID)
     return package.get('resources')
 
 
 def update_existing_resource(filename, resource_id):
     print("update {filename}".format(filename=file_to_publish(filename)))
-    DATA_GOVT_NZ.action.resource_update(
+    CKAN_REMOTE.action.resource_update(
         id=resource_id, upload=open(file_to_publish(filename), 'rb'))
 
 
 def create_new_resource(filename):
     print("Publishing new resource.")
-    DATA_GOVT_NZ.action.resource_create(
+    CKAN_REMOTE.action.resource_create(
         package_id=CKAN_PACKAGE_ID, description=filename,
         upload=open(file_to_publish(filename), 'rb'))
 
 
 def delete_all_existing_resources():
-    package = DATA_GOVT_NZ.action.package_show(id=CKAN_PACKAGE_ID)
+    package = CKAN_REMOTE.action.package_show(id=CKAN_PACKAGE_ID)
     resources = package.get('resources')
     for r in resources:
         resource_id = r.get('id')
-        DATA_GOVT_NZ.action.resource_delete(id=resource_id)
+        CKAN_REMOTE.action.resource_delete(id=resource_id)
 
 
 def file_to_publish(filename):
