@@ -6,7 +6,7 @@ if the same, the publish on CKAN
 """
 
 from os import listdir
-from os.path import isfile, join
+from os.path import isfile, join, exists
 from dotenv import load_dotenv, find_dotenv
 from ckanapi import RemoteCKAN
 import csv
@@ -32,26 +32,36 @@ def find_files(files_dir):
         join(files_dir, f))]
     return files
 
+def does_file_exist(file):
+    return os.path.exists(file)
 
 def ensure_data_structure_unchanged(filename, archive_dir, incoming_dir):
     previous_file = "{dir}{filename}".format(
         dir=archive_dir, filename=filename)
-
+    
+    if does_file_exist(previous_file):
+        pass
+    else: # If no file exists it's a new file so we wont need to comapre the structure
+        print('New file to upload.')
+        return
+    
     with open(previous_file) as csvfile:
         reader = csv.DictReader(csvfile)
         previous_headers = reader.fieldnames
 
     new_file = "{dir}{filename}".format(
         dir=incoming_dir, filename=filename)
+        
     with open(new_file) as csvfile:
         reader = csv.DictReader(csvfile)
         new_headers = reader.fieldnames
 
     if(new_headers != previous_headers):
         difference = set(new_headers) - set(previous_headers)
-        raise RuntimeError("new headers: {difference}".format(difference=difference))
-
-
+        raise SystemExit("Data structure changed, stop the upload: {difference}".format(difference=difference))
+    else:
+        print('File is same structure as previous file upload, ok to continue.')
+    
 def find_existing_resource_id(filename):
     resources = existing_resources()
     for r in resources:
@@ -71,7 +81,7 @@ def existing_resources():
 
 
 def update_existing_resource(filename, resource_id):
-    print("update {filename}".format(filename=file_to_publish(filename)))
+    print("Update {filename}".format(filename=file_to_publish(filename)))
     CKAN_REMOTE.action.resource_update(
         id=resource_id, upload=open(file_to_publish(filename), 'rb'))
 
@@ -105,7 +115,7 @@ if __name__ == "__main__":
         else:
             print(filename)
 
-            print("Checking file structure is same as last time.")
+            print("Checking file structure...")
             ensure_data_structure_unchanged(
                 filename, archive_dir=ARCHIVE_DIR,
                 incoming_dir=FILES_TO_PUBLISH_DIR)
