@@ -16,7 +16,7 @@ This is a set of command line scripts that can be used to pickup data files from
  1. Setup your servers operating system, dependancies and crypto (ssh/gpg keys).
  2. `git clone` this repository and `cd` into the directory. 
  3. `pyenv install` will install the correct python version.
- 4. `virtualenv .` install the python virtual environment in the root of the directory.
+ 4. `virtualenv ./venv` install the python virtual environment in the root of the directory.
  5. `source ./bin/activate && pip install -r requirements.txt` to install the requirements into the `virtualenv` when done you can `deactivate`. 
  6. `cp env-example .env` then update with the credentials (see documentation below).
  7. Add cron job (see documentation below for an example).
