@@ -42,7 +42,7 @@ def ensure_data_structure_unchanged(filename, archive_dir, incoming_dir):
     if does_file_exist(previous_file):
         pass
     else: # If no file exists it's a new file so we wont need to comapre the structure
-        print('New file to upload.')
+        print('New file to upload')
         return
     
     with open(previous_file) as csvfile:
@@ -60,7 +60,7 @@ def ensure_data_structure_unchanged(filename, archive_dir, incoming_dir):
         difference = set(new_headers) - set(previous_headers)
         raise SystemExit("Data structure changed, stop the upload: {difference}".format(difference=difference))
     else:
-        print('File is same structure as previous file upload, ok to continue.')
+        print('File is same structure as previous file upload, ok to continue')
     
 def find_existing_resource_id(filename):
     resources = existing_resources()
@@ -81,13 +81,13 @@ def existing_resources():
 
 
 def update_existing_resource(filename, resource_id):
-    print("Update {filename}".format(filename=file_to_publish(filename)))
+    print("Update CKAN Resource: {resource_id}".format(resource_id=resource_id))
     CKAN_REMOTE.action.resource_update(
         id=resource_id, upload=open(file_to_publish(filename), 'rb'))
 
 
 def create_new_resource(filename):
-    print("Publishing new resource.")
+    print("Publishing new resource")
     CKAN_REMOTE.action.resource_create(
         package_id=CKAN_PACKAGE_ID, description=filename,
         upload=open(file_to_publish(filename), 'rb'))
@@ -110,10 +110,8 @@ if __name__ == "__main__":
 
     for filename in files:
 
-        if filename == '.keep':
-            print("Skipping .keep")
-        else:
-            print(filename)
+        if filename != '.keep':
+            print('Data found:{filename}')
 
             print("Checking file structure...")
             ensure_data_structure_unchanged(
@@ -124,11 +122,11 @@ if __name__ == "__main__":
 
             if (resource_id):
                 print("Publishing update to CKAN")
-                # TODO: Check if file is identical
+                # TODO: Check if file is identical - perhaps a sha1 hash compare?
                 update_existing_resource(filename, resource_id)
             else:
                 print("Creating new resource on CKAN")
                 create_new_resource(filename)
 
-            print("Saving archive copy.")
+            print("Saving data to archive")
             archive_file(filename)
