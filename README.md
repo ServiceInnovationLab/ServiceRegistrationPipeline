@@ -108,6 +108,6 @@ Please report security issues to the module maintainers directly. Please don't f
 ## Contributing
 See [CONTRIBUTING](CONTRIBUTING.md).md
 
-### Maintainers
+## Maintainers
  - Cam Findlay ([camfindlay](https://github.com/camfindlay)) - cam.findlay@dia.govt.nz
- - Brenda Wallace (brenda to add details in PR)
+ - [Brenda Wallace](brenda.wallace@dia.govt.nz) 
