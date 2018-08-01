@@ -23,8 +23,8 @@ CKAN_PACKAGE_ID = os.environ.get('CKAN_PACKAGE_ID')
 FILES_TO_PUBLISH_DIR = os.environ.get('FILES_TO_PUBLISH_DIR')
 ARCHIVE_DIR = os.environ.get('ARCHIVE_DIR')
 
-CKAN_REMOTE = RemoteCKAN(CKAN_URL, apikey=CKAN_API_KEY,
-                          user_agent=CKAN_CLIENT_USER_AGENT)
+CKAN_REMOTE = RemoteCKAN(CKAN_URL, apikey=CKAN_API_KEY, 
+    user_agent=CKAN_CLIENT_USER_AGENT)
 
 
 def find_files(files_dir):
@@ -43,7 +43,7 @@ def ensure_data_structure_unchanged(filename, archive_dir, incoming_dir):
 
     if does_file_exist(previous_file):
         pass
-    else:  # If no file exists, new file dont comapre the structure
+    else:   # new file so we wont need to comapre the structure
         print('New file to upload')
         return
 
@@ -53,7 +53,6 @@ def ensure_data_structure_unchanged(filename, archive_dir, incoming_dir):
 
     new_file = "{dir}{filename}".format(
         dir=incoming_dir, filename=filename)
-
     with open(new_file) as csvfile:
         reader = csv.DictReader(csvfile)
         new_headers = reader.fieldnames
@@ -115,7 +114,7 @@ if __name__ == "__main__":
     for filename in files:
 
         if filename != '.keep':
-            print('Data found:{filename}')
+            print("Data found: {filename}".format(filename=filename))
 
             print("Checking file structure...")
             ensure_data_structure_unchanged(
