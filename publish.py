@@ -11,6 +11,7 @@ from dotenv import load_dotenv, find_dotenv
 from ckanapi import RemoteCKAN
 import csv
 import os
+import io
 
 # Load config from .env
 load_dotenv(find_dotenv())
@@ -47,13 +48,13 @@ def ensure_data_structure_unchanged(filename, archive_dir, incoming_dir):
         print('New file to upload')
         return
 
-    with open(previous_file) as csvfile:
+    with io.open(previous_file, "r", encoding='utf-8-sig') as csvfile:
         reader = csv.DictReader(csvfile)
         previous_headers = reader.fieldnames
 
     new_file = "{dir}{filename}".format(
         dir=incoming_dir, filename=filename)
-    with open(new_file) as csvfile:
+    with io.open(new_file, "r", encoding='utf-8-sig') as csvfile:
         reader = csv.DictReader(csvfile)
         new_headers = reader.fieldnames
 
