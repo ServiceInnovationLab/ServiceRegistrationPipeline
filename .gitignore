@@ -1,6 +1,5 @@
 .env
-
 *.pyc
-
 incoming/*
 archive/*
+venv/
