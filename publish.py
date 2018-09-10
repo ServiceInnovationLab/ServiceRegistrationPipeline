@@ -11,6 +11,7 @@ from dotenv import load_dotenv, find_dotenv
 from ckanapi import RemoteCKAN
 import csv
 import os
+import io
 
 # Load config from .env
 load_dotenv(find_dotenv())
@@ -27,6 +28,7 @@ CKAN_REMOTE = RemoteCKAN(CKAN_URL, apikey=CKAN_API_KEY,
                           user_agent=CKAN_CLIENT_USER_AGENT)
 
 
+
 def find_files(files_dir):
     files = [f for f in listdir(files_dir) if isfile(
         join(files_dir, f))]
@@ -35,33 +37,38 @@ def find_files(files_dir):
 def does_file_exist(file):
     return os.path.exists(file)
 
+def does_file_exist(file):
+    return os.path.exists(file)
+
+
 def ensure_data_structure_unchanged(filename, archive_dir, incoming_dir):
     previous_file = "{dir}{filename}".format(
         dir=archive_dir, filename=filename)
-    
+
     if does_file_exist(previous_file):
         pass
-    else: # If no file exists it's a new file so we wont need to comapre the structure
+    else:   # new file so we wont need to comapre the structure
         print('New file to upload')
         return
-    
-    with open(previous_file) as csvfile:
+
+    with io.open(previous_file, "r", encoding='utf-8-sig') as csvfile:
         reader = csv.DictReader(csvfile)
         previous_headers = reader.fieldnames
 
     new_file = "{dir}{filename}".format(
         dir=incoming_dir, filename=filename)
-        
-    with open(new_file) as csvfile:
+    with io.open(new_file, "r", encoding='utf-8-sig') as csvfile:
         reader = csv.DictReader(csvfile)
         new_headers = reader.fieldnames
 
     if(new_headers != previous_headers):
         difference = set(new_headers) - set(previous_headers)
-        raise SystemExit("Data structure changed, stop the upload: {difference}".format(difference=difference))
+        raise SystemExit("Data structure changed, stop the upload: \
+        {difference}".format(difference=difference))
     else:
         print('File is same structure as previous file upload, ok to continue')
-    
+
+
 def find_existing_resource_id(filename):
     resources = existing_resources()
     for r in resources:
@@ -81,7 +88,7 @@ def existing_resources():
 
 
 def update_existing_resource(filename, resource_id):
-    print("Update CKAN Resource: {resource_id}".format(resource_id=resource_id))
+    print("Update resource: {resource_id}".format(resource_id=resource_id))
     CKAN_REMOTE.action.resource_update(
         id=resource_id, upload=open(file_to_publish(filename), 'rb'))
 
@@ -111,7 +118,7 @@ if __name__ == "__main__":
     for filename in files:
 
         if filename != '.keep':
-            print('Data found:{filename}')
+            print("Data found: {filename}".format(filename=filename))
 
             print("Checking file structure...")
             ensure_data_structure_unchanged(
