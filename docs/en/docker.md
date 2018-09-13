@@ -5,38 +5,47 @@
 
 ## Configuration
 
+Docker requires a few additional configuration keys to work. See the docker-env-example file. The easiest way to manage configuration is by putting them in a file and setting them using the `--env-file` flag in your docker run command
+
+| Key                    | purpose                                                                        |
+|------------------------|:------------------------------------------------------------------------------:|
+| CKAN_API_KEY           | your ckan API access key                                                       |
+| CKAN_URL               | The url of the ckan instance                                                   |
+| CKAN_CLIENT_USER_AGENT | a user agent string so you can identify the api calls                          |
+| CKAN_PACKAGE_ID        | the id/slug of the dataset you will update with resources                      |
+| SSH_KEY_FILE           | You will need to mount a ssh key for sftp access, this is the path of that key |
+| SFTP_HOST              | the host of the sftp server                                                    |
+| SFTP_USER              | the username for access to the sftp server                                     |
+| SFTP_DIR               | the directory of the sftp server that will be accessed                         |
+| DECRYPTION_KEY         | The path of the GPG key which has been mounted into the container              |
+
 ## Getting started
 
 ## Building the Docker container
 Run `docker build -t datapipeline . --no-cache` to build the container image
 
 ## Running the container locally
-Run `docker run -dit --env-file .env --name acmepipeline datapipeline`
 
-This will pass in the variable you have set in the .env file and start a named container "acmepipeline" using the image "datapipeline" we built earlier.
 
-If you need to run multiple containers you can give them different names and pass in different configuration files.
-
-Run `docker ps` and look for a running container with the name "acmepipeline"
-
-### Accessing the terminal inside the container to run scripts
- * Run `docker exec -it acmepipeline bash` to connect to a bash terminal inside the docker container.
- * Check to see if your environment variable have loaded by running `env` in the terminal.
- * You can now run the various shell and python scripts to carry out the pipeline tasks.
- * You can run the various workflow scripts directly: 
-  * `docker docker exec -it acmepipeline /app/fetch.sh` (Fetch files from sftp pickup point into the incoming directory)
-  * `docker docker exec -it acmepipeline /app/decrypt.sh` (Decrypt the files in the incoming directory with PGP key)
-  * `docker exec -it acmepipeline /app/publish.py` (no need to run the .sh in docker as no python virtual environment is needed).
-
-### Mounting SSH and PGP keys
-TODO: Further detailed instructions.
- * Mount SSH volume, add `-v ~/.ssh:/root/.ssh` to your docker run command.
- * Mount PGP volume, add `-v ~/.gnupg:/root/.gnupg` to your docker run command.
-
-### Setting up cron on the host
-
+```
+docker run -it --env-file ckan_data_pipeline.env \
+ -v archive:/archive \
+ -v ~/.ssh/id_rsa:/id_rsa \
+ -v ~/Code/dia/decrypt_secret.asc:/decrypt_secret.asc \
+ --name fsd datapipeline bash
+```
 
 ## Deploying the Docker container to a server
 
+
+### Pushing a new version of the code to the server
+TODO
+
+### Deploying the container on a server
+TODO
+
+### Running as a cron
+
+TODO
 
 

@@ -137,3 +137,5 @@ if __name__ == "__main__":
 
             print("Saving data to archive")
             archive_file(filename)
+    else:
+        print("No files found in {}".format(FILES_TO_PUBLISH_DIR))

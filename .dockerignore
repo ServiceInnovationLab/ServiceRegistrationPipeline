@@ -14,3 +14,5 @@ CONTRIBUTING.md
 env-example
 LICENSE.md
 renovate.json
+ckan_data_pipeline.env
+.idea

@@ -3,3 +3,5 @@
 incoming/*
 archive/*
 venv/
+ckan_data_pipeline.env
+.idea

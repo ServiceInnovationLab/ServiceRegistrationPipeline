@@ -1,5 +1,8 @@
 #!/bin/bash
-source .env
+if [ -f .env ]; then
+    source .env
+fi
+
 set -eu
 
 FILES=$FILES_TO_PUBLISH_DIR*.gpg
@@ -9,7 +12,7 @@ do
   echo "Processing $f file..."
   output_file=${f%.*}
   echo $output_file " decrypted"
-  
+
   #decrypt the files
   gpg --output $output_file --decrypt $f
 
