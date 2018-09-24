@@ -1,8 +1,11 @@
 #!/bin/bash
 set -eu
 
-export ARCHIVE_DIR=/archive
-export FILES_TO_PUBLISH=/incoming
+export ARCHIVE_DIR=/var/lib/ckan_data_pipeline/archive/
+export FILES_TO_PUBLISH_DIR=/var/lib/ckan_data_pipeline/incoming/
+
+mkdir -p $ARCHIVE_DIR
+mkdir -p $FILES_TO_PUBLISH_DIR
 
 if [ -z "$CKAN_URL" ]; then
     exit 1
