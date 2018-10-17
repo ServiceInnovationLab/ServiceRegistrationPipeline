@@ -1,0 +1,11 @@
+CKAN_API_KEY=<your ckan API access key>
+CKAN_URL=https://uat.data.govt.nz
+CKAN_CLIENT_USER_AGENT=FSD-Data-Pipeline
+CKAN_PACKAGE_ID=family-services-directory
+FILES_TO_PUBLISH_DIR=/incoming
+ARCHIVE_DIR=/archive
+SSH_KEY_FILE=/dia_id_rsa
+SFTP_HOST=sftp.yourhost.com
+SFTP_USER=sftperson
+SFTP_DIR=sftplocation
+DECRYPTION_KEY=/keyfile_location
