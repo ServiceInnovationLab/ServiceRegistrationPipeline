@@ -6,4 +6,4 @@ docopt==0.6.2
 idna==2.7
 python-dotenv==0.9.1
 requests==2.19.1
-urllib3==1.23
+urllib3==1.24
